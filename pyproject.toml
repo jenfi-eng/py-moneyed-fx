@@ -1,3 +1,6 @@
+[tool.pylint.FORMAT]
+max-line-length = 119
+
 [tool.poetry]
 name = "moneyed-fx"
 version = "0.0.1"
