@@ -17,6 +17,14 @@ def get_rate_for(currency, date: datetime.date):
     return _handle_response(response)
 
 
+# Some rates don't have enough decimal places like base-VND.
+# For example VND -> SGD, look up SGD rate for VND and 1/sgd_vnd to get the reverse rate.
+#
+# It's a bad assumption to believe it is perfectly inverse, but it's better than truly inaccurate rates.
+def use_reverse_rate(currency):
+    return currency in ["VND"]
+
+
 def _handle_response(resp):
     utc_time = datetime.utcfromtimestamp(resp["timestamp"])
 

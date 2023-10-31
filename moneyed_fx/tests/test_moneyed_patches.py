@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from django.test import TestCase, override_settings
 from django.utils import timezone
@@ -32,3 +33,12 @@ class TestMoneyedPatches(TestCase):
 
         assert str(fx_ed.currency) == "USD"
         assert fx_ed.amount == 400
+
+    @override_settings(MONEYED_FX_RATE_SOURCE="moneyed_fx.tests.mock_source.services")
+    def test_reverse_rate(self):
+        amt = Money(100, "VND")
+
+        fx_ed = amt.fx_to("USD")
+
+        assert str(fx_ed.currency) == "USD"
+        assert fx_ed.amount == Decimal("25")

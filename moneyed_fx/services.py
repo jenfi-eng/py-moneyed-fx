@@ -1,3 +1,4 @@
+import datetime as datetime_lib
 import importlib
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -10,9 +11,9 @@ from moneyed_fx.models import FxRate
 
 def get_current_rate(from_currency, to_currency):
     # Get the current rate function
-    source_services_mod = _get_rate_source_mod(from_currency)
+    source_services_mod = _get_rate_source_mod()
 
-    rates = source_services_mod.get_current_rates()
+    rates = source_services_mod.get_current_rates(from_currency)
 
     return Decimal(rates[to_currency])
 
@@ -20,7 +21,7 @@ def get_current_rate(from_currency, to_currency):
 def get_stored_rate(from_currency, to_currency, date_or_datetime):
     rate_datetime = date_or_datetime
 
-    if isinstance(date_or_datetime, datetime.date):
+    if isinstance(date_or_datetime, datetime_lib.date):
         rate_datetime = _date_to_datetime_in_current_timezone(date_or_datetime)
 
     start_of_day = datetime.combine(rate_datetime, time.min)
@@ -41,6 +42,12 @@ def get_stored_rate(from_currency, to_currency, date_or_datetime):
 def update_all_rates():
     for currency in settings.CURRENCIES:
         _update_rates_for(currency)
+
+
+def use_reverse_rates(currency):
+    source_services_mod = _get_rate_source_mod()
+
+    return source_services_mod.use_reverse_rate(str(currency))
 
 
 def check_valid_currencies(from_currency, to_currency):

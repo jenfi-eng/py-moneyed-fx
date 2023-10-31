@@ -125,7 +125,7 @@ LOGIN_URL = "/auth/login/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-CURRENCIES = ["SGD", "USD"]
+CURRENCIES = ["SGD", "USD", "VND"]
 
 OPEN_EXCHANGE_RATE = {
     "api_key": env.str("OPEN_EXCHANGE_RATE_API_KEY", "abcd"),
