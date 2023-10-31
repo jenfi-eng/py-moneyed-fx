@@ -36,6 +36,11 @@ def get_stored_rate(from_currency, to_currency, date_or_datetime):
         .first()
     )
 
+    if rate is None:
+        raise ValueError(
+            f"No rate found for {from_currency} to {to_currency} on {date_or_datetime}"
+        )
+
     return Decimal(rate.rates[to_currency])
 
 

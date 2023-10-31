@@ -20,6 +20,7 @@ from django.http import HttpResponse
 from django.urls import path
 from django.utils.timezone import localtime
 from django.views import View
+from moneyed import Money
 
 from moneyed_fx.services import update_all_rates
 from open_exchange_rate.services import get_current_rates, get_rate_for
@@ -48,9 +49,19 @@ class TestUpdate(View):
         return HttpResponse("Updated")
 
 
+class TestConvert(View):
+    def get(self, request):
+        # money = Money(1, "USD").fx_to("VND", localtime() - timedelta(weeks=2))
+        # return HttpResponse(f"1 USD to VND: {money}")
+
+        money = Money(10000000, "VND").fx_to("USD", localtime() - timedelta(weeks=2))
+        return HttpResponse(f"10000000 VND to USD: {money}")
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("__test1__", TestRunner1.as_view()),
     path("__test2__", TestRunner2.as_view()),
     path("__update__", TestUpdate.as_view()),
+    path("__test__", TestConvert.as_view()),
 ]
