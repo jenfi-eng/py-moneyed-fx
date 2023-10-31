@@ -37,11 +37,11 @@ This package is built by Jenfi engieering for handling its FX requirements in re
   - `get_rate_for(currency, date)`
   - Both functions must return the form:
 
-    ```
-    {
-     "USD": 451.14,
-     "SGD": 1112.12
-    }
-    ```
+  ```json
+  {
+    "USD": 451.14,
+    "SGD": 1112.12
+  }
+  ```
 
-    etc
+- `use_reverse_rates(currency)` - this is unique to OpenExchangeRates and a problem with VND. Return False in most cases.
