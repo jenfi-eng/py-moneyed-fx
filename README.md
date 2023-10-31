@@ -25,3 +25,9 @@ This package is built by Jenfi engieering for handling its FX requirements in re
    to create a poll (you'll need the Admin app enabled).
 
 1. Visit <http://127.0.0.1:8000/polls/> to participate in the poll.
+
+## Adding New Exchange Rate Source
+
+- moneyed_fx downloads the rates and saves to the DB.
+- Default, it uses `open_exchange_rate` as the source.
+-
