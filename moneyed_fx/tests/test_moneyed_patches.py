@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 from moneyed import Money
 
@@ -23,3 +23,12 @@ class TestMoneyedPatches(TestCase):
 
         assert str(fx_ed.currency) == "USD"
         assert fx_ed.amount == 500
+
+    @override_settings(MONEYED_FX_RATE_SOURCE="moneyed_fx.tests.mock_source.services")
+    def test_current_rate(self):
+        amt = Money(100, "SGD")
+
+        fx_ed = amt.fx_to("USD")
+
+        assert str(fx_ed.currency) == "USD"
+        assert fx_ed.amount == 400

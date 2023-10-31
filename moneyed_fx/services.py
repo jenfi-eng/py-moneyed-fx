@@ -1,4 +1,5 @@
-from datetime import date, datetime, time
+import importlib
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 
 from django.conf import settings
@@ -7,28 +8,20 @@ from django.utils import timezone
 from moneyed_fx.models import FxRate
 
 
-def check_valid_currencies(from_currency, to_currency):
-    if not from_currency.__str__() in settings.CURRENCIES:
-        raise ValueError(
-            f"Invalid from_currency: {from_currency} not in settings.CURRENCIES"
-        )
-
-    if not to_currency.__str__() in settings.CURRENCIES:
-        raise ValueError(
-            f"Invalid to_currency: {to_currency} not in settings.CURRENCIES"
-        )
-
-
 def get_current_rate(from_currency, to_currency):
-    # go to the API and ask
-    pass
+    # Get the current rate function
+    source_services_mod = _get_rate_source_mod()
+
+    rates = source_services_mod.get_current_rates()
+
+    return Decimal(rates[to_currency])
 
 
 def get_stored_rate(from_currency, to_currency, date_or_datetime):
     rate_datetime = date_or_datetime
 
     if isinstance(date_or_datetime, date):
-        rate_datetime = date_to_datetime_in_current_timezone(date_or_datetime)
+        rate_datetime = _date_to_datetime_in_current_timezone(date_or_datetime)
 
     start_of_day = datetime.combine(rate_datetime, time.min)
     end_of_day = datetime.combine(rate_datetime, time.max)
@@ -45,6 +38,23 @@ def get_stored_rate(from_currency, to_currency, date_or_datetime):
     return Decimal(rate.rates[to_currency])
 
 
+def update_all_rates():
+    for currency in settings.CURRENCIES:
+        _update_rates_for(currency)
+
+
+def check_valid_currencies(from_currency, to_currency):
+    if not from_currency.__str__() in settings.CURRENCIES:
+        raise ValueError(
+            f"Invalid from_currency: {from_currency} not in settings.CURRENCIES"
+        )
+
+    if not to_currency.__str__() in settings.CURRENCIES:
+        raise ValueError(
+            f"Invalid to_currency: {to_currency} not in settings.CURRENCIES"
+        )
+
+
 def is_today(date_or_datetime):
     # Convert datetime to local time
     local_datetime = timezone.localtime(date_or_datetime)
@@ -56,7 +66,18 @@ def is_today(date_or_datetime):
     return local_datetime.date() == today
 
 
-def date_to_datetime_in_current_timezone(date):
+######################################
+
+
+def _get_rate_source_mod():
+    mod_path = getattr(
+        settings, "MONEYED_FX_RATE_SOURCE", "open_exchange_rate.services"
+    )
+
+    return importlib.import_module(mod_path)
+
+
+def _date_to_datetime_in_current_timezone(date):
     # Get the current timezone
     current_time = timezone.localtime()
 
@@ -67,3 +88,37 @@ def date_to_datetime_in_current_timezone(date):
     )
 
     return new_datetime
+
+
+########################################
+
+
+def _update_rates_for(currency):
+    latest_rate = (
+        FxRate.objects.filter(base_currency=currency).order_by("-timestamp").first()
+    )
+
+    if latest_rate is None:
+        start_datetime = timezone.now()
+        start_datetime.replace(year=2023, month=8, day=1)
+    else:
+        start_datetime = latest_rate.timestamp
+
+    end_date = (timezone.now() - timedelta(days=1)).date()
+
+    current_date = start_datetime.date()
+
+    while current_date <= end_date:
+        source_mod = _get_rate_source_mod()
+
+        rates, timestamp = source_mod.get_rate_for(currency, current_date)
+
+        fx_rate, created = FxRate.objects.get_or_create(
+            base_currency=currency, timestamp=timestamp, defaults={"rates": rates}
+        )
+
+        if not created:
+            fx_rate.rates = rates
+            fx_rate.save()
+
+        current_date += timedelta(days=1)
