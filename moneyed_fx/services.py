@@ -1,5 +1,5 @@
 import importlib
-from datetime import date, datetime, time, timedelta
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 
 from django.conf import settings
@@ -10,7 +10,7 @@ from moneyed_fx.models import FxRate
 
 def get_current_rate(from_currency, to_currency):
     # Get the current rate function
-    source_services_mod = _get_rate_source_mod()
+    source_services_mod = _get_rate_source_mod(from_currency)
 
     rates = source_services_mod.get_current_rates()
 
@@ -20,7 +20,7 @@ def get_current_rate(from_currency, to_currency):
 def get_stored_rate(from_currency, to_currency, date_or_datetime):
     rate_datetime = date_or_datetime
 
-    if isinstance(date_or_datetime, date):
+    if isinstance(date_or_datetime, datetime.date):
         rate_datetime = _date_to_datetime_in_current_timezone(date_or_datetime)
 
     start_of_day = datetime.combine(rate_datetime, time.min)
@@ -104,6 +104,7 @@ def _update_rates_for(currency):
     else:
         start_datetime = latest_rate.timestamp
 
+    # Yesterday
     end_date = (timezone.now() - timedelta(days=1)).date()
 
     current_date = start_datetime.date()

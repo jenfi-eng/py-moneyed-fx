@@ -12,9 +12,13 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+import environ
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+load_dotenv()  # Only use for local.
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -27,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS: list[str] = []
 
+env = environ.Env()
 
 # Application definition
 
@@ -77,8 +82,8 @@ DATABASES = {
     # The default settings may work well for local development.
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "HOST": "127.0.0.1",
+        "NAME": "moneyed_fx_local",
+        "HOST": "postgres",
         "PORT": "5432",
         "USER": "postgres",
         "PASSWORD": "",
@@ -121,3 +126,7 @@ LOGIN_URL = "/auth/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 CURRENCIES = ["SGD", "USD"]
+
+OPEN_EXCHANGE_RATE = {
+    "api_key": env.str("OPEN_EXCHANGE_RATE_API_KEY", "abcd"),
+}

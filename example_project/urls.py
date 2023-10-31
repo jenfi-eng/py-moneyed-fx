@@ -13,9 +13,35 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from datetime import timedelta
+
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import path
+from django.utils.timezone import localtime
+from django.views import View
+
+from open_exchange_rate.services import get_current_rates, get_rate_for
+
+
+class TestRunner1(View):
+    def get(self, request):
+        rates, timestamp = get_current_rates("SGD")
+
+        return HttpResponse(f"{rates} {timestamp}")
+
+
+class TestRunner2(View):
+    def get(self, request):
+        rates, timestamp = get_rate_for(
+            "SGD", (localtime() - timedelta(weeks=2)).date()
+        )
+
+        return HttpResponse(f"{rates} {timestamp}")
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("__test1__", TestRunner1.as_view()),
+    path("__test2__", TestRunner2.as_view()),
 ]

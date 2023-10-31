@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 
-def get_current_rates():
+def get_current_rates(currency):
     return {"USD": 4.0}
 
 
