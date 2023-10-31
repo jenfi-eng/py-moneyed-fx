@@ -21,6 +21,7 @@ from django.urls import path
 from django.utils.timezone import localtime
 from django.views import View
 
+from moneyed_fx.services import update_all_rates
 from open_exchange_rate.services import get_current_rates, get_rate_for
 
 
@@ -40,8 +41,16 @@ class TestRunner2(View):
         return HttpResponse(f"{rates} {timestamp}")
 
 
+class TestUpdate(View):
+    def get(self, request):
+        update_all_rates()
+
+        return HttpResponse("Updated")
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("__test1__", TestRunner1.as_view()),
     path("__test2__", TestRunner2.as_view()),
+    path("__update__", TestUpdate.as_view()),
 ]

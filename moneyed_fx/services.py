@@ -107,7 +107,7 @@ def _update_rates_for(currency):
 
     if latest_rate is None:
         start_datetime = timezone.now()
-        start_datetime.replace(year=2023, month=8, day=1)
+        start_datetime = start_datetime.replace(year=2023, month=8, day=1)
     else:
         start_datetime = latest_rate.timestamp
 

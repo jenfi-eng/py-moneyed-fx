@@ -21,10 +21,7 @@ This package is built by Jenfi engieering for handling its FX requirements in re
 
 1. Run `python manage.py migrate` to create the polls models.
 
-1. Start the development server and visit <http://127.0.0.1:8000/admin/>
-   to create a poll (you'll need the Admin app enabled).
-
-1. Visit <http://127.0.0.1:8000/polls/> to participate in the poll.
+1. Add a cronjob that runs daily ~4am UTC `moneyed_fx.services.update_all_rates`
 
 ## Adding New Exchange Rate Source
 

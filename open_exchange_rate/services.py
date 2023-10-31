@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from open_exchange_rate.api import Historical, Latest
 
@@ -26,6 +27,7 @@ def use_reverse_rate(currency):
 
 
 def _handle_response(resp):
-    utc_time = datetime.utcfromtimestamp(resp["timestamp"])
+    utc_zone = ZoneInfo("UTC")
+    utc_time = datetime.fromtimestamp(resp["timestamp"], utc_zone)
 
     return resp["rates"], utc_time
