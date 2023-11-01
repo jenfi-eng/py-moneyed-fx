@@ -15,8 +15,8 @@ class TestMoneyedPatches(TestCase):
         self.rate = FxRateFactory(timestamp=self.timestamp, rates={"USD": 5.0})
 
     def test_basic(self):
-        assert 1 == 1
-        assert Money(100, "USD").moneyed_fx_test() == "Moneyed FX Test: $100.00, 100."
+        amt = Money(100, "USD")
+        assert amt.moneyed_fx_test() == f"Moneyed FX Test: {amt}, {amt.amount}."
 
     def test_stored_rate(self):
         amt = Money(100, "SGD")
