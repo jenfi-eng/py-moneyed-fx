@@ -20,7 +20,7 @@ class Base:
 
     @classmethod
     def _options(cls, options):
-        config = settings.OPEN_EXCHANGE_RATE
+        config = settings.OPEN_EXCHANGE_RATES
         default_options = {"app_id": config["api_key"]}
         if options:
             default_options.update(options)

@@ -127,6 +127,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 CURRENCIES = ["SGD", "USD", "VND"]
 
-OPEN_EXCHANGE_RATE = {
-    "api_key": env.str("OPEN_EXCHANGE_RATE_API_KEY", "abcd"),
+OPEN_EXCHANGE_RATES = {
+    "api_key": env.str("OPEN_EXCHANGE_RATES_API_KEY", "abcd"),
 }

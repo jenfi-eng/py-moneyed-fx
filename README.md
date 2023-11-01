@@ -26,7 +26,7 @@ This package is built by Jenfi engieering for handling its FX requirements in re
 ## Adding New Exchange Rate Source
 
 - moneyed_fx downloads the rates and saves to the DB.
-- Default, it uses `open_exchange_rate.services` as the source.
+- Default, it uses `open_exchange_rates.services` as the source.
 - must have a module named `services.py`
 - Required methods
 
