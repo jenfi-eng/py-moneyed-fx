@@ -45,7 +45,7 @@ def get_stored_rate(from_currency, to_currency, date_or_datetime):
 
 
 def update_all_rates():
-    for currency in settings.CURRENCIES:
+    for currency in _get_currencies():
         _update_rates_for(currency)
 
 
@@ -56,12 +56,12 @@ def use_reverse_rates(currency):
 
 
 def check_valid_currencies(from_currency, to_currency):
-    if not from_currency.__str__() in settings.CURRENCIES:
+    if not from_currency.__str__() in _get_currencies():
         raise ValueError(
             f"Invalid from_currency: {from_currency} not in settings.CURRENCIES"
         )
 
-    if not to_currency.__str__() in settings.CURRENCIES:
+    if not to_currency.__str__() in _get_currencies():
         raise ValueError(
             f"Invalid to_currency: {to_currency} not in settings.CURRENCIES"
         )
@@ -135,3 +135,12 @@ def _update_rates_for(currency):
             fx_rate.save()
 
         current_date += timedelta(days=1)
+
+
+def _get_currencies():
+    currencies = settings.CURRENCIES
+
+    if callable(currencies):
+        return currencies()
+
+    return currencies

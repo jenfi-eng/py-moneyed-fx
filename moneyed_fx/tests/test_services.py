@@ -13,7 +13,10 @@ class TestServices(TestCase):
         self.timestamp = timezone.now() - timedelta(days=5)
         self.rate = FxRateFactory(timestamp=self.timestamp, rates={"USD": 5.0})
 
-    @override_settings(MONEYED_FX_RATE_SOURCE="moneyed_fx.tests.mock_source.services")
+    @override_settings(
+        MONEYED_FX_RATE_SOURCE="moneyed_fx.tests.mock_source.services",
+        CURRENCIES=["SGD"],
+    )
     def test_updating_rates(self):
         update_all_rates()
 

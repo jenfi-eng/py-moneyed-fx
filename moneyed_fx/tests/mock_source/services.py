@@ -11,3 +11,7 @@ def get_rate_for(currency, date):
 
 def use_reverse_rate(currency):
     return currency in ["VND"]
+
+
+def currencies_func():
+    return ["USD", "VND"]

@@ -6,6 +6,7 @@ from django.utils import timezone
 from moneyed import Money
 
 from moneyed_fx.tests.factories import FxRateFactory
+from moneyed_fx.tests.mock_source.services import currencies_func
 
 
 class TestMoneyedPatches(TestCase):
@@ -36,6 +37,18 @@ class TestMoneyedPatches(TestCase):
 
     @override_settings(MONEYED_FX_RATE_SOURCE="moneyed_fx.tests.mock_source.services")
     def test_reverse_rate(self):
+        amt = Money(100, "VND")
+
+        fx_ed = amt.fx_to("USD")
+
+        assert str(fx_ed.currency) == "USD"
+        assert fx_ed.amount == Decimal("25")
+
+    @override_settings(
+        CURRENCIES=currencies_func,
+        MONEYED_FX_RATE_SOURCE="moneyed_fx.tests.mock_source.services",
+    )
+    def test_currencies_function(self):
         amt = Money(100, "VND")
 
         fx_ed = amt.fx_to("USD")
