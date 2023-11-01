@@ -7,7 +7,7 @@ version = "0.0.1"
 description = "FX handler for Jenfi's use of py-moneyed"
 authors = ["Justin Louie <224840+nitsujri@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "moneyed_fx"}]
+packages = [{include = "moneyed_fx"}, {include = "open_exchange_rates"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

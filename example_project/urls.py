@@ -23,7 +23,7 @@ from django.views import View
 from moneyed import Money
 
 from moneyed_fx.services import update_all_rates
-from open_exchange_rate.services import get_current_rates, get_rate_for
+from open_exchange_rates.services import get_current_rates, get_rate_for
 
 
 class TestRunner1(View):

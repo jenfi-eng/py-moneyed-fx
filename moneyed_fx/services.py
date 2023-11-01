@@ -83,7 +83,7 @@ def is_today(date_or_datetime):
 
 def _get_rate_source_mod():
     mod_path = getattr(
-        settings, "MONEYED_FX_RATE_SOURCE", "open_exchange_rate.services"
+        settings, "MONEYED_FX_RATE_SOURCE", "open_exchange_rates.services"
     )
 
     return importlib.import_module(mod_path)

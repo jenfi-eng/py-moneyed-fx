@@ -1,7 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from open_exchange_rate.api import Historical, Latest
+from open_exchange_rates.api import Historical, Latest
 
 
 def get_current_rates(currency):
