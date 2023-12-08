@@ -34,3 +34,13 @@ python-dotenv = "^1.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+# ==== pytest ====
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--ds=example_project.settings --reuse-db --no-migrations --color=yes --code-highlight=yes"
+python_files = [
+    "tests.py",
+    "test_*.py",
+]
+norecursedirs = ["node_modules"]
