@@ -11,7 +11,7 @@ packages = [{include = "moneyed_fx"}, {include = "open_exchange_rates"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-django = "^4.2.6"
+django = ">=4.2.8"
 py-moneyed = "^3.0"
 psycopg2 = "^2.9.9"
 django-model-utils = "^4.3.1"
