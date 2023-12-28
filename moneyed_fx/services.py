@@ -13,7 +13,7 @@ def get_current_rate(from_currency, to_currency):
     # Get the current rate function
     source_services_mod = _get_rate_source_mod()
 
-    rates = source_services_mod.get_current_rates(from_currency)
+    rates, _date = source_services_mod.get_current_rates(from_currency)
 
     return Decimal(rates[to_currency])
 
