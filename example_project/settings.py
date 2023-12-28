@@ -123,8 +123,6 @@ STATIC_URL = "/static/"
 
 LOGIN_URL = "/auth/login/"
 
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-
 CURRENCIES = ["SGD", "USD", "VND"]
 
 OPEN_EXCHANGE_RATES = {
