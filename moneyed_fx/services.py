@@ -1,8 +1,9 @@
 import datetime as datetime_lib
 import importlib
-from datetime import datetime, time, timedelta
+from datetime import timedelta
 from decimal import Decimal
 
+import pendulum
 from django.conf import settings
 from django.utils import timezone
 
@@ -24,8 +25,9 @@ def get_stored_rate(from_currency, to_currency, date_or_datetime):
     if isinstance(date_or_datetime, datetime_lib.date):
         rate_datetime = _date_to_datetime_in_current_timezone(date_or_datetime)
 
-    start_of_day = datetime.combine(rate_datetime, time.min)
-    end_of_day = datetime.combine(rate_datetime, time.max)
+    tz = timezone.get_current_timezone()
+    start_of_day = pendulum.instance(rate_datetime, tz=tz).start_of("day")
+    end_of_day = pendulum.instance(rate_datetime, tz=tz).end_of("day")
 
     # go to the database and ask
     rate = (

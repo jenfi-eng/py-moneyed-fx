@@ -2,7 +2,7 @@ from django.utils import timezone
 
 
 def get_current_rates(currency):
-    return {"USD": 4.0, "VND": 4.0}
+    return {"USD": 4.0, "VND": 4.0}, "unused_date"
 
 
 def get_rate_for(currency, date):
