@@ -58,12 +58,12 @@ def use_reverse_rates(currency):
 
 
 def check_valid_currencies(from_currency, to_currency):
-    if not from_currency.__str__() in _get_currencies():
+    if from_currency.__str__() not in _get_currencies():
         raise ValueError(
             f"Invalid from_currency: {from_currency} not in settings.CURRENCIES"
         )
 
-    if not to_currency.__str__() in _get_currencies():
+    if to_currency.__str__() not in _get_currencies():
         raise ValueError(
             f"Invalid to_currency: {to_currency} not in settings.CURRENCIES"
         )

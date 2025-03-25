@@ -3,17 +3,16 @@ max-line-length = 119
 
 [tool.poetry]
 name = "moneyed-fx"
-version = "0.0.1"
+version = "0.1.0"
 description = "FX handler for Jenfi's use of py-moneyed"
 authors = ["Justin Louie <224840+nitsujri@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "moneyed_fx"}, {include = "open_exchange_rates"}]
+packages = [{ include = "moneyed_fx" }, { include = "open_exchange_rates" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 django = ">=4.2.8"
 py-moneyed = "^3.0"
-psycopg2 = "^2.9.9"
 django-model-utils = "^4.3.1"
 django-environ = "^0.11.2"
 requests = "^2.31.0"
@@ -31,6 +30,7 @@ factory-boy = "^3.3.0"
 pytest-django = "^4.5.2"
 pytest-randomly = "^3.15.0"
 python-dotenv = "^1.0.0"
+psycopg = { extras = ["binary"], version = "^3.2.6" }
 
 [build-system]
 requires = ["poetry-core"]
@@ -40,8 +40,5 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--ds=example_project.settings --reuse-db --no-migrations --color=yes --code-highlight=yes"
-python_files = [
-    "tests.py",
-    "test_*.py",
-]
+python_files = ["tests.py", "test_*.py"]
 norecursedirs = ["node_modules"]
