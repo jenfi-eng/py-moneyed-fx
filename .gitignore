@@ -282,3 +282,5 @@ webpack/webpack-stats-test.json
 
 tmp/
 import-db.sh
+
+.claude/
