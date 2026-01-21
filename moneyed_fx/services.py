@@ -25,14 +25,11 @@ def get_stored_rate(from_currency, to_currency, date_or_datetime):
     if isinstance(date_or_datetime, datetime_lib.date):
         rate_datetime = _date_to_datetime_in_current_timezone(date_or_datetime)
 
-    tz = timezone.get_current_timezone()
-    start_of_day = pendulum.instance(rate_datetime, tz=tz).start_of("day")
-    end_of_day = pendulum.instance(rate_datetime, tz=tz).end_of("day")
-
-    # go to the database and ask
+    # Use timestamp__lte to get the most recent rate known at transaction time
+    # This matches SQL's fx_amount() behavior: WHERE timestamp <= exchanged_at
     rate = (
         FxRate.objects.filter(
-            base_currency=from_currency, timestamp__range=(start_of_day, end_of_day)
+            base_currency=from_currency, timestamp__lte=rate_datetime
         )
         .order_by("-timestamp")
         .first()
