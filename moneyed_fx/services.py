@@ -22,7 +22,11 @@ def get_current_rate(from_currency, to_currency):
 def get_stored_rate(from_currency, to_currency, date_or_datetime):
     rate_datetime = date_or_datetime
 
-    if isinstance(date_or_datetime, datetime_lib.date):
+    # Only convert if it's a pure date object, not a datetime
+    # (datetime is a subclass of date, so we need to exclude it explicitly)
+    if isinstance(date_or_datetime, datetime_lib.date) and not isinstance(
+        date_or_datetime, datetime_lib.datetime
+    ):
         rate_datetime = _date_to_datetime_in_current_timezone(date_or_datetime)
 
     # Use timestamp__lte to get the most recent rate known at transaction time
